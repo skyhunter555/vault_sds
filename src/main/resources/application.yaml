@@ -1,0 +1,14 @@
+server:
+  port: 8088
+logging:
+  config: classpath:log4j2.xml
+springfox:
+  documentation:
+    swagger:
+      v2:
+        path=/swagger.json
+
+vault:
+  url: 127.0.0.1
+  port-http: 8200
+  port-https: 8201
