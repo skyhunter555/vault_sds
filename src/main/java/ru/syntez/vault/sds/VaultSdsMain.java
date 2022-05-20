@@ -8,7 +8,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * Main class for console running
  *
  * @author Skyhunter
- * @date 26.05.2021
+ * @date 20.05.2022
  */
 @SpringBootApplication
 @EnableSwagger2
