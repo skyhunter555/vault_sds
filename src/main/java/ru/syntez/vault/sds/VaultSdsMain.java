@@ -3,7 +3,7 @@ package ru.syntez.vault.sds;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import ru.syntez.vault.sds.config.VaultConfig;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
@@ -16,6 +16,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @SpringBootApplication
 @EnableSwagger2
 @EnableConfigurationProperties(VaultConfig.class)
+@RefreshScope
 public class VaultSdsMain {
 
     public static void main(String[] args) {

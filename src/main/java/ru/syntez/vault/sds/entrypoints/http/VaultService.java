@@ -28,6 +28,7 @@ public class VaultService {
         SampleResponse response = new SampleResponse();
         long startTime = System.currentTimeMillis();
         try {
+
             Map<String, Object> result = new HashMap<>();
             result.put("cert", vaultConfig.getCert());
             result.put("key", vaultConfig.getKey());
