@@ -29,30 +29,21 @@ public class VaultHttpController {
     // Read a secret
     @GetMapping("/read-secret")
     @ApiOperation(value = "Read secret", produces = "application/json")
-    public SampleResponse readSecret(
-            @ApiParam(
-                    value = "Only active currencies",
-                    required = true
-            )
-            @RequestParam String secretName,
-            @RequestHeader HttpHeaders header
-    ) {
-        return vaultService.readSecret(secretName);
+    public SampleResponse readSecret() {
+        return vaultService.readSecret();
     }
 
     // Read a secret tls
     @GetMapping("/read-secret-tls")
     @ApiOperation(value = "Read TLS secret", produces = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
-    public SampleResponse readSecretTLS(
-            @ApiParam(
-                    value = "Only active currencies",
-                    required = true
-            )
-            @RequestParam String secretName,
-            @RequestHeader HttpHeaders header
-    ) {
-        return vaultService.readSecretTLS(secretName);
+    public SampleResponse readSecretTLS() {
+        try {
+            return vaultService.readSecretTLS();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new SampleResponse();
+        }
     }
 }
 
