@@ -20,13 +20,13 @@ import org.springframework.vault.client.VaultEndpoint;
 import org.springframework.vault.core.VaultTemplate;
 
 import javax.net.ssl.SSLContext;
-import java.util.Map;
 import java.util.Objects;
 
 @Service
 public class VaultService {
 
     private static Logger LOG = LogManager.getLogger(VaultService.class);
+    private static String tlsProtocol = "TLSv1.2";
 
     @Value("${vault.url}")
     private String vaultUrl = "127.0.0.1";
@@ -36,6 +36,12 @@ public class VaultService {
 
     @Value("${vault.port-https}")
     private Integer vaultPortHttps = 8201;
+
+    @Value("${vault.token}")
+    private String vaultToken = "";
+
+    @Value("${vault.secret-path}")
+    private String vaultSecretPath = "";
 
     @Value("${vault.secret}")
     private String vaultSecret = "";
@@ -49,7 +55,6 @@ public class VaultService {
     public SampleResponse readSecret() {
 
         VaultEndpoint vaultEndpoint = new VaultEndpoint();
-
         vaultEndpoint.setHost(vaultUrl);
         vaultEndpoint.setPort(vaultPortHttp);
         vaultEndpoint.setScheme("http");
@@ -57,47 +62,26 @@ public class VaultService {
         // Authenticate
         VaultTemplate vaultTemplate = new VaultTemplate(
                 vaultEndpoint,
-                new TokenAuthentication("root"));
+                new TokenAuthentication(vaultToken));
 
-        SampleResponse response = new SampleResponse();
-        long startTime = System.currentTimeMillis();
-            try {
-                VaultResponse readResponse = vaultTemplate
-                        .opsForKeyValue("secret", VaultKeyValueOperationsSupport.KeyValueBackend.KV_2)
-                        .get(vaultSecret);
-
-                if (readResponse != null) {
-                    response.setSecretVault(Objects.requireNonNull(readResponse.getData()));
-                    response.setError("OK");
-                }
-                //LOG.info(String.format("MessageResponse: %s", readResponse.getData()));
-            } catch (Exception e) {
-                LOG.error(String.format("Error send message: %s", e.getMessage()));
-                response.setError(e.getMessage());
-            }
-
-        long finishTime = System.currentTimeMillis();
-        int receivedTotal = (int) (finishTime - startTime);
-        LOG.info(String.format("Total time: %s ms.", receivedTotal));
-
-        return response;
+        return getSecretFromVault(vaultTemplate);
     }
 
     public SampleResponse readSecretTLS() throws Exception {
 
         VaultEndpoint vaultEndpoint = new VaultEndpoint();
-
         vaultEndpoint.setHost(vaultUrl);
         vaultEndpoint.setPort(vaultPortHttps);
         vaultEndpoint.setScheme("https");
 
         SSLContext sslContext = new SSLContextBuilder()
-                    .setProtocol("TLSv1.2")
+                    .setProtocol(tlsProtocol)
                     .loadTrustMaterial(trustStore.getURL(), trustStorePassword.toCharArray())
                     .build();
 
         SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(sslContext);
-        HttpClient httpClient = HttpClients.custom()
+        HttpClient httpClient = HttpClients
+                .custom()
                 .setSSLSocketFactory(socketFactory)
                 .build();
 
@@ -107,14 +91,18 @@ public class VaultService {
         VaultTemplate vaultTemplate = new VaultTemplate(
                 vaultEndpoint,
                 requestFactory,
-                new SimpleSessionManager(new TokenAuthentication("root"))
+                new SimpleSessionManager(new TokenAuthentication(vaultToken))
         );
 
+        return getSecretFromVault(vaultTemplate);
+    }
+
+    private SampleResponse getSecretFromVault(VaultTemplate vaultTemplate) {
         SampleResponse response = new SampleResponse();
         long startTime = System.currentTimeMillis();
         try {
             VaultResponse readResponse = vaultTemplate
-                    .opsForKeyValue("secret", VaultKeyValueOperationsSupport.KeyValueBackend.KV_2)
+                    .opsForKeyValue(vaultSecretPath, VaultKeyValueOperationsSupport.KeyValueBackend.KV_2)
                     .get(vaultSecret);
 
             if (readResponse != null) {

@@ -12,6 +12,8 @@ vault:
   url: 127.0.0.1
   port-http: 8200
   port-https: 8201
+  token: "root"
+  secret-path: "secret"
   secret: "rnd-vault-sds"
   tls:
     trust-store: classpath:/vault_ts.p12
