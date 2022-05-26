@@ -1,0 +1,9 @@
+grpc:
+  client:
+    inProcess:
+      address: in-process:test
+      enableKeepAlive:
+      negotiationType:
+  server:
+    inProcessName: test
+    port: -1
