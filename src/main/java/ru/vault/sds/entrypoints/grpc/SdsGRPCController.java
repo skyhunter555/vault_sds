@@ -25,6 +25,10 @@ public class SdsGRPCController extends SecretDiscoveryServiceGrpc.SecretDiscover
     @Value("${vault.secret.cert-name}")
     private String secretCertName = "sds.cert";
 
+    @Value("${vault.tls.enabled}")
+    private Boolean tlsEnabled = false;
+
+
     private final VaultService vaultService;
 
     public SdsGRPCController(VaultService vaultService) {

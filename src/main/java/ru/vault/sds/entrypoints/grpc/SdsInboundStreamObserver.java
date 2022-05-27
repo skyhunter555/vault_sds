@@ -135,7 +135,18 @@ public class SdsInboundStreamObserver implements StreamObserver<DiscoveryRequest
             String resourceName
     ) {
         VaultService vaultService = sdsController.getVaultService();
-        SecretResponse secretResponse = vaultService.readSecret(resourceName);
+
+        SecretResponse secretResponse = null;
+        if (sdsController.getTlsEnabled()) {
+            try {
+                secretResponse = vaultService.readSecretTLS(resourceName);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            secretResponse = vaultService.readSecret(resourceName);
+        }
+
         Secret secret = getOneTlsCertSecret(resourceName, secretResponse);
         if (secret != null) {
             ByteString data = secret.toByteString();
@@ -146,7 +157,7 @@ public class SdsInboundStreamObserver implements StreamObserver<DiscoveryRequest
 
     private Secret getOneTlsCertSecret(String name, SecretResponse secretResponse) {
 
-        Map secretMap = secretResponse.getSecretVault();
+        Map<String, Object> secretMap = secretResponse.getSecretVault();
         if (secretMap.isEmpty()) {
             return null;
         }

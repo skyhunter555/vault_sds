@@ -26,5 +26,6 @@ vault:
     key-name:  "sds.key"
     cert-name: "sds.cert"
   tls:
+    enabled: true
     trust-store: classpath:/vault_ts.p12
     trust-store-password: "vault555"
