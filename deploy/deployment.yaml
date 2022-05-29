@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: vault-sds-app
+  name: vault-sds-app
+  namespace: syntez
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vault-sds-app
+  template:
+    metadata:
+      annotations:
+        prometheus.io/path: /actuator/prometheus
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8008"
+      labels:
+        app: vault-sds-app
+      name: vault-sds-app
+    spec:
+      containers:
+        - name: vault-sds-app
+          image: 0.0.0.0:5000/syntez/vault-sds-app
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8008
+              protocol: TCP
+            - name: grpc
+              containerPort: 6556
+              protocol: TCP
+            - name: debug
+              containerPort: 5005
+              protocol: TCP
+          volumeMounts:
+            - mountPath: "/config"
+              name: application-config
+              readOnly: true
+          env:
+            - name: spring.config.location
+              value: /config/application.yml
+            - name: TZ
+              value: Europe/Moscow
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 512Mi
+            requests:
+              cpu: 200m
+              memory: 512Mi
+      volumes:
+        - name: application-config
+          configMap:
+            name: vault-sds-app-conf-prod
+            items:
+                - key: application.yml
+                  path: application.yml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    visualize: "true"
+  name: vault-sds-app-service
+  namespace: syntez
+spec:
+  selector:
+    app: vault-sds-app
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8008
+      targetPort: 8008
+    - name: grpc
+      protocol: TCP
+      port: 6556
+      targetPort: 6556
+  type: ClusterIP

@@ -1,0 +1,39 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vault-sds-app-conf-prod
+  namespace: syntez
+data:
+  application.yml: |-
+    server:
+      port: 8008
+    logging:
+      config: classpath:log4j2.xml
+
+    #swagger *******************
+    springfox:
+      documentation:
+        swagger:
+          v2:
+            path=/swagger.json
+
+    #grpc *******************
+    grpc:
+      server:
+        inProcessName: vault
+        port: 6556
+
+    vault:
+      url: 127.0.0.1
+      port-http: 8200
+      port-https: 8201
+      token: "root"
+      secret:
+        path: "secret"
+        key-name:  "sds.key"
+        cert-name: "sds.cert"
+      tls:
+        enabled: true
+        trust-store: classpath:/vault_ts.p12
+        trust-store-password: "vault555"
