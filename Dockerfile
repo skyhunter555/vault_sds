@@ -1,12 +1,14 @@
-### Добавление jar микросервиса
-WORKDIR /
-COPY target/*.jar app.jar
+FROM openjdk:8-jdk-alpine
 
-### Команда запуска приложения
-CMD java $JAVA_OPTS -jar app.jar -Dspring.config.location=/config/
+# The application's jar file
+ARG JAR_FILE=rnd-vault-sds/build/libs/rnd-vault-sds-1.0.0.jar
+ARG JAVA_OPTS="-Xmx256m -Xms256m"
+# Add the application's jar to the container
+ADD ${JAR_FILE} /app.jar
 
-#BUILD
-mvn clean install
+# HTTP port
+EXPOSE 8008
+EXPOSE 6556
+EXPOSE 5005
 
-#RUN
-java -jar autoscaler-1.0.0.jar
+ENTRYPOINT exec java $JAVA_OPTS -jar /app.jar

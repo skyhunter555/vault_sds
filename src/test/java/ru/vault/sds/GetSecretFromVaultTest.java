@@ -7,6 +7,7 @@ import io.envoyproxy.envoy.service.secret.v3.ReactorSecretDiscoveryServiceGrpc;
 import io.envoyproxy.envoy.service.secret.v3.SecretDiscoveryServiceGrpc;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import reactor.core.publisher.Flux;
@@ -14,6 +15,7 @@ import reactor.core.publisher.Flux;
 import static org.junit.Assert.assertNotNull;
 
 @SpringBootTest
+@Ignore
 public class GetSecretFromVaultTest {
 
     final long startTime = System.nanoTime();
