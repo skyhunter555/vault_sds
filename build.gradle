@@ -50,8 +50,6 @@ dependencies {
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.0.3.RELEASE'
     testImplementation group: 'junit', name: 'junit', version: '4.12'
 
-    testImplementation 'io.grpc:grpc-testing:1.30.0'
-
 }
 
 configurations {
