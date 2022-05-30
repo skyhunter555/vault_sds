@@ -4,7 +4,7 @@ metadata:
   labels:
     app: vault-sds-app
   name: vault-sds-app
-  namespace: syntez
+  namespace: demo
 spec:
   replicas: 1
   selector:
@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: vault-sds-app
-          image: 0.0.0.0:5000/syntez/vault-sds-app
+          image: 0.0.0.0:5000/syntez/vault-sds
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -55,8 +55,8 @@ spec:
           configMap:
             name: vault-sds-app-conf-prod
             items:
-                - key: application.yml
-                  path: application.yml
+              - key: application.yml
+                path: application.yml
 ---
 apiVersion: v1
 kind: Service
@@ -64,7 +64,7 @@ metadata:
   labels:
     visualize: "true"
   name: vault-sds-app-service
-  namespace: syntez
+  namespace: demo
 spec:
   selector:
     app: vault-sds-app

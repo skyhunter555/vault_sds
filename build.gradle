@@ -41,16 +41,16 @@ dependencies {
     implementation 'org.apache.httpcomponents:httpclient:4.5.8'
 
     implementation 'net.devh:grpc-spring-boot-starter:2.13.1.RELEASE'
-    implementation 'io.grpc:grpc-netty:1.41.0'
-    implementation 'io.grpc:grpc-protobuf:1.41.0'
-    implementation 'io.grpc:grpc-stub:1.41.0'
+    implementation 'io.grpc:grpc-netty:1.30.0'
+    implementation 'io.grpc:grpc-protobuf:1.30.0'
+    implementation 'io.grpc:grpc-stub:1.30.0'
     implementation 'com.salesforce.servicelibs:reactor-grpc-stub:1.0.0'
     implementation group: 'io.envoyproxy.controlplane', name: 'server', version: '0.1.31'
 
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.0.3.RELEASE'
     testImplementation group: 'junit', name: 'junit', version: '4.12'
 
-    testImplementation 'io.grpc:grpc-testing:1.41.0'
+    testImplementation 'io.grpc:grpc-testing:1.30.0'
 
 }
 
