@@ -6,7 +6,6 @@ import io.envoyproxy.envoy.service.discovery.v3.DiscoveryRequest;
 import io.envoyproxy.envoy.service.discovery.v3.DiscoveryResponse;
 import io.envoyproxy.envoy.service.secret.v3.SecretDiscoveryServiceGrpc;
 import io.grpc.stub.StreamObserver;
-import lombok.Data;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.beans.factory.annotation.Value;
 import ru.vault.sds.entrypoints.http.VaultService;
@@ -16,7 +15,6 @@ import java.util.List;
 import static lombok.Lombok.checkNotNull;
 
 @GrpcService
-@Data
 public class SdsGRPCController extends SecretDiscoveryServiceGrpc.SecretDiscoveryServiceImplBase {
 
     @Value("${vault.secret.key-name}")
@@ -87,6 +85,66 @@ public class SdsGRPCController extends SecretDiscoveryServiceGrpc.SecretDiscover
         inboundStreamObserver = new SdsInboundStreamObserver(responseObserver, this);
         inboundStreamObserver.onNext(request);
         inboundStreamObserver.onCompleted();
+    }
+
+    public Boolean getTlsEnabled() {
+        return tlsEnabled;
+    }
+
+    public void setTlsEnabled(Boolean tlsEnabled) {
+        this.tlsEnabled = tlsEnabled;
+    }
+
+    public VaultService getVaultService() {
+        return vaultService;
+    }
+
+    public DiscoveryRequest getLastRequest() {
+        return lastRequest;
+    }
+
+    public void setLastRequest(DiscoveryRequest lastRequest) {
+        this.lastRequest = lastRequest;
+    }
+
+    public DiscoveryResponse getLastResponse() {
+        return lastResponse;
+    }
+
+    public void setLastResponse(DiscoveryResponse lastResponse) {
+        this.lastResponse = lastResponse;
+    }
+
+    public String getCurrentVersion() {
+        return currentVersion;
+    }
+
+    public void setCurrentVersion(String currentVersion) {
+        this.currentVersion = currentVersion;
+    }
+
+    public String getLastRespondedNonce() {
+        return lastRespondedNonce;
+    }
+
+    public void setLastRespondedNonce(String lastRespondedNonce) {
+        this.lastRespondedNonce = lastRespondedNonce;
+    }
+
+    public List<String> getLastResourceNames() {
+        return lastResourceNames;
+    }
+
+    public void setLastResourceNames(List<String> lastResourceNames) {
+        this.lastResourceNames = lastResourceNames;
+    }
+
+    public String getSecretKeyName() {
+        return secretKeyName;
+    }
+
+    public String getSecretCertName() {
+        return secretCertName;
     }
 
 }
