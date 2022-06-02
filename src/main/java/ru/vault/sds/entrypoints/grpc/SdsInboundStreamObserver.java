@@ -19,8 +19,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
 
-import static lombok.Lombok.checkNotNull;
-
 public class SdsInboundStreamObserver implements StreamObserver<DiscoveryRequest> {
 
     private static Logger logger = LogManager.getLogger(SdsInboundStreamObserver.class);
@@ -72,7 +70,7 @@ public class SdsInboundStreamObserver implements StreamObserver<DiscoveryRequest
     }
 
     private DiscoveryResponse buildResponse(DiscoveryRequest discoveryRequest) {
-        checkNotNull(discoveryRequest, "discoveryRequest");
+        //checkNotNull(discoveryRequest, "discoveryRequest");
         String requestVersion = discoveryRequest.getVersionInfo();
         String requestNonce = discoveryRequest.getResponseNonce();
         ProtocolStringList resourceNames = discoveryRequest.getResourceNamesList();
@@ -84,7 +82,7 @@ public class SdsInboundStreamObserver implements StreamObserver<DiscoveryRequest
             String requestNonce,
             List<String> resourceNames,
             DiscoveryRequest discoveryRequest) {
-        checkNotNull(resourceNames, "resourceNames");
+        //checkNotNull(resourceNames, "resourceNames");
         if (discoveryRequest != null && discoveryRequest.hasErrorDetail()) {
             sdsController.setLastRequest(discoveryRequest);
             return null;

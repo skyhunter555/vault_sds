@@ -9,10 +9,7 @@ import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.beans.factory.annotation.Value;
 import ru.vault.sds.entrypoints.http.VaultService;
-
 import java.util.List;
-
-import static lombok.Lombok.checkNotNull;
 
 @GrpcService
 public class SdsGRPCController extends SecretDiscoveryServiceGrpc.SecretDiscoveryServiceImplBase {
@@ -44,7 +41,7 @@ public class SdsGRPCController extends SecretDiscoveryServiceGrpc.SecretDiscover
 
     @Override
     public StreamObserver<DiscoveryRequest> streamSecrets(StreamObserver<DiscoveryResponse> responseObserver) {
-        checkNotNull(responseObserver, "responseObserver");
+        //checkNotNull(responseObserver, "responseObserver");
         inboundStreamObserver = new SdsInboundStreamObserver(responseObserver, this);
         return inboundStreamObserver;
     }
@@ -81,7 +78,7 @@ public class SdsGRPCController extends SecretDiscoveryServiceGrpc.SecretDiscover
     }
 
     public void fetchSecrets(DiscoveryRequest request, StreamObserver<DiscoveryResponse> responseObserver) {
-        checkNotNull(responseObserver, "responseObserver");
+        //checkNotNull(responseObserver, "responseObserver");
         inboundStreamObserver = new SdsInboundStreamObserver(responseObserver, this);
         inboundStreamObserver.onNext(request);
         inboundStreamObserver.onCompleted();
@@ -89,10 +86,6 @@ public class SdsGRPCController extends SecretDiscoveryServiceGrpc.SecretDiscover
 
     public Boolean getTlsEnabled() {
         return tlsEnabled;
-    }
-
-    public void setTlsEnabled(Boolean tlsEnabled) {
-        this.tlsEnabled = tlsEnabled;
     }
 
     public VaultService getVaultService() {
